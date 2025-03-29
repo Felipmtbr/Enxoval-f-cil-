@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enxoval de Casa Nova</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        .room { margin-bottom: 20px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Monte seu Enxoval</h2>
+        <div id="login" class="login">
+            <input type="text" id="username" placeholder="Seu nome">
+            <button onclick="login()">Entrar</button>
+        </div>
+        <div id="app" class="hidden">
+            <label for="room">Escolha um cômodo:</label>
+            <select id="room">
+                <option>Quarto</option>
+                <option>Cozinha</option>
+                <option>Banheiro</option>
+                <option>Sala</option>
+            </select>
+            <input type="text" id="item" placeholder="Nome do item">
+            <button onclick="addItem()">Adicionar</button>
+            
+            <h3>Lista de Enxoval</h3>
+            <ul id="list"></ul>
+            <button onclick="comparePrices()">Comparar Preços</button>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            if (!username) return alert("Digite seu nome");
+            localStorage.setItem('user', username);
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            loadItems();
+        }
+
+        function addItem() {
+            const room = document.getElementById('room').value;
+            const item = document.getElementById('item').value;
+            if (!item) return alert("Digite um item");
+            
+            const list = document.getElementById('list');
+            const li = document.createElement('li');
+            li.textContent = `${room}: ${item}`;
+            list.appendChild(li);
+            
+            saveItem(room, item);
+            document.getElementById('item').value = '';
+        }
+
+        function saveItem(room, item) {
+            let items = JSON.parse(localStorage.getItem('items')) || [];
+            items.push({ room, item });
+            localStorage.setItem('items', JSON.stringify(items));
+        }
+
+        function loadItems() {
+            let items = JSON.parse(localStorage.getItem('items')) || [];
+            const list = document.getElementById('list');
+            list.innerHTML = '';
+            items.forEach(({ room, item }) => {
+                const li = document.createElement('li');
+                li.textContent = `${room}: ${item}`;
+                list.appendChild(li);
+            });
+        }
+
+        function comparePrices() {
+            alert("Funcionalidade de comparação de preços em desenvolvimento!");
+        }
+    </script>
+</body>
+</html>
